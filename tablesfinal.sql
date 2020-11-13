@@ -15,20 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create user if not exists admini@localhost identified by 'passadm';
-grant all privileges on projet.* to admini@localhost;
-ALTER USER 'admini'@localhost IDENTIFIED WITH mysql_native_password BY 'passadm';
-
-create user if not exists techni@localhost identified by 'passtech';
-grant SELECT on projet.technicien to techni@localhost;
-grant SELECT on projet.administrateur to techni@localhost;
-grant SELECT, INSERT, UPDATE on projet.intervention to techni@localhost;
-grant SELECT, INSERT, UPDATE on projet.client to techni@localhost;
-grant SELECT, INSERT, UPDATE on projet.arrivee_voiture to techni@localhost;
-grant SELECT, INSERT, UPDATE on projet.voiture to techni@localhost;
-grant SELECT, INSERT, UPDATE on projet.commune to techni@localhost;
-ALTER USER 'techni'@localhost IDENTIFIED WITH mysql_native_password BY 'passtech';
-FLUSH PRIVILEGES;
 
 --
 -- Table structure for table `administrateur`
@@ -225,4 +211,19 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+
+create user if not exists admini@localhost identified by 'passadm';
+grant all privileges on projet.* to admini@localhost;
+ALTER USER 'admini'@localhost IDENTIFIED WITH mysql_native_password BY 'passadm';
+
+create user if not exists techni@localhost identified by 'passtech';
+grant SELECT on projet.technicien to techni@localhost;
+grant SELECT on projet.administrateur to techni@localhost;
+grant SELECT, INSERT, UPDATE on projet.intervention to techni@localhost;
+grant SELECT, INSERT, UPDATE on projet.client to techni@localhost;
+grant SELECT, INSERT, UPDATE on projet.arrivee_voiture to techni@localhost;
+grant SELECT, INSERT, UPDATE on projet.voiture to techni@localhost;
+grant SELECT, INSERT, UPDATE on projet.commune to techni@localhost;
+ALTER USER 'techni'@localhost IDENTIFIED WITH mysql_native_password BY 'passtech';
+FLUSH PRIVILEGES;
 -- Dump completed on 2020-11-11 13:18:22
