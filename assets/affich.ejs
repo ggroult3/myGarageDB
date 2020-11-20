@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width = display-width, initial-scale = 1">
+    <meta name="author" content="Guillaume Groult et Antoine Valentin">
+    <meta name="description" content="Projet MOD 4.6 sur MySQL">
+	<link rel="stylesheet" href="../style.css">
+
+	<img src="../garage.png " width="150">
+
+    <title>MyGarageDB : Projet MOD 4.6</title>
+</head>
+
+<body>
+    <h1>Affichage de la base de données</h1>
+    <p>Vous êtes connectés en tant que ..... (technicien ou administrateur)</p>
+    <br/><br/>
+    <form action="/mysql/select/techn" method="POST">
+        <label for="submitSQLRequest">Choisissez quelle table afficher</label>
+        <select id="submitSQLRequest">
+		   <option value="adm">Administrateur</option>
+		   <option value="arr">Arrivée de la voiture</option>
+		   <option value="cli">Client</option>
+		   <option value="com">Commune</option>
+		   <option value="int">Intervention</option>
+		   <option value="techn">Technicien</option>
+		   <option value="voi">Voiture</option>
+		</select>
+		<br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <% console.log("\nFélicitations, vous êtes connecté à la page principale !\n") %> 
+    <% if (JSON.stringify(result)!=JSON.stringify([]) && JSON.stringify(result[0].idadm)!=JSON.stringify([])) { %>
+        <h3 id='table'>Table Technicien</h3>
+        <table id='table'>
+            <thead>
+                <tr>
+                    <th colspan="1">idtechn</th>
+                    <th colspan="1">nom</th>
+                    <th colspan="1">prenom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% result.forEach(element => { %>
+                    <tr>
+                        <td><%= element.idtechn %> </td>
+                        <td><%= element.nom %></td>
+                        <td><%= element.prenom %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+
+</body>

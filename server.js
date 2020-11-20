@@ -7,11 +7,6 @@ const PORT = process.env.PORT || 8080 // Définition du port sur lequel le serve
 
 var result = [] // Contient les résultats de la requête SQL demandé
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "techni", // admini ou techni
-  password: "passtech" // passadm ou passtech
-}); // Créée une connexion avec la base de données
 
 app.use('/',express.static(__dirname + '/assets')) // Permet l'utilisation des fichiers présents de le dossier /assets
 
@@ -19,7 +14,11 @@ app.get('/',function(req,res){
   res.status(200).render(__dirname + '/assets/index.ejs',{result:result}) // Fait le rendu de l'index.ejs lors d'une requête GET /
 }) 
 
-app.post('/mysql',function(req,res){ // Requête POST du formulaire /mysql
+app.get('/affich',function(req,res){
+  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+}) 
+
+app.post('/mysql/select/admin',function(req,res){ // Requête POST du formulaire /mysql
   res.status(200)
   console.log('Requête SQL envoyée !')
   connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
@@ -27,9 +26,41 @@ app.post('/mysql',function(req,res){ // Requête POST du formulaire /mysql
     result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
     console.log(result);
   });
-  res.redirect('/') // Fait une redirection à l'adresse principale
+  res.redirect('/affich') // Fait une redirection à l'adresse principale
 }) 
 
+app.post('/mysql/select/techn',function(req,res){ // Requête POST du formulaire /mysql
+  res.status(200)
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result);
+  });
+  res.redirect('/affich') // Fait une redirection à l'adresse test
+}) 
+
+app.get('/conn/admi',function(req,res){ // Requête get du formulaire /mysql
+  res.status(200)
+  console.log("Connexion en tant qu'admin")
+  connection = mysql.createConnection({
+    host: "localhost",
+    user: "admini", // admini ou techni
+    password: "passadm" // passadm ou passtech
+  }); // Créée une connexion avec la base de données
+  res.redirect('/affich') // Fait une redirection à l'adresse test
+}) 
+
+app.get('/conn/techn',function(req,res){ // Requête get du formulaire /mysql
+  res.status(200)
+  console.log("Connexion en tant que technicien")
+  connection = mysql.createConnection({
+    host: "localhost",
+    user: "techni", // admini ou techni
+    password: "passtech" // passadm ou passtech
+  }); // Créée une connexion avec la base de données
+  res.redirect('/affich') // Fait une redirection à l'adresse test
+}) 
 
 app.listen(PORT,() => { // Démarre le serveur en local sur le port PORT
   console.log('\nServeur démarré !')
