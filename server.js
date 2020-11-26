@@ -6,6 +6,8 @@ const ejs = require('ejs') // Module permettant le rendu HTML généré de mani�
 const PORT = process.env.PORT || 8080 // Définition du port sur lequel le serveur sera écouté
 
 var result = [] // Contient les résultats de la requête SQL demandé
+var result2 = [] // Contient les résultats de la requête SQL demandé
+var idvalue = [] // Contient les résultats de la requête SQL demandé
 
 
 app.use('/',express.static(__dirname + '/assets')) // Permet l'utilisation des fichiers présents de le dossier /assets
@@ -17,7 +19,40 @@ app.get('/',function(req,res){
 app.get('/affich',function(req,res){
   res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user}) // Fait le rendu de techn.ejs lors d'une requête GET /
   console.log(connection.config.user)
+
 }) 
+
+app.get('/ajoutclient',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutclient.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result);
+  });
+  connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result2);
+  });
+  connection.query("SELECT MAX(idclient) FROM projet.client", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+	console.log(idmax)
+	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
+	valueidmax=Object.values(idmaxobj[0])[0]
+	if (!valueidmax){
+		idvalue=1
+		console.log('1')}
+	else{
+	idvalue=valueidmax+1
+	console.log('2')};
+		
+  });
+
+
+}) 
+
 
 app.post('/mysql/select/admin',function(req,res){ // Requête POST du formulaire /mysql
   res.status(200)
