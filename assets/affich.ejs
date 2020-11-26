@@ -14,7 +14,13 @@
 
 <body>
     <h1>Affichage de la base de données</h1>
-    <p>Vous êtes connectés en tant que ..... (technicien ou administrateur)</p>
+    <p>Vous êtes connectés en tant que 
+        <% if (user=="techni") { %> <%# On fait un test pour savoir qui est connecté à la base de données %> 
+            technicien.
+        <% } else { %>
+            administrateur.
+        <% } %>
+    </p>
     <br/><br/>
     <form action="/mysql/select/techn" method="POST">
         <label for="submitSQLRequest">Choisissez quelle table afficher</label>
@@ -33,7 +39,7 @@
     <% console.log("\nFélicitations, vous êtes connecté à la page principale !\n") %> 
     <% if (JSON.stringify(result)!=JSON.stringify([]) && JSON.stringify(result[0].idadm)!=JSON.stringify([])) { %>
         <h3 id='table'>Table Technicien</h3>
-        <table id='table'>
+        <table id='table' class='center'>
             <thead>
                 <tr>
                     <th colspan="1">idtechn</th>

@@ -15,7 +15,8 @@ app.get('/',function(req,res){
 }) 
 
 app.get('/affich',function(req,res){
-  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log(connection.config.user)
 }) 
 
 app.post('/mysql/select/admin',function(req,res){ // Requête POST du formulaire /mysql
