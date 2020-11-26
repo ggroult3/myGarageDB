@@ -14,45 +14,46 @@
 
 <body>
     <h1>Affichage de la base de données</h1>
-    <p>Vous êtes connectés en tant que 
+    <p>Vous êtes connectés en tant 
         <% if (user=="techni") { %> <%# On fait un test pour savoir qui est connecté à la base de données %> 
-            technicien.
+            que technicien.
         <% } else { %>
-            administrateur.
+            qu'administrateur.
         <% } %>
     </p>
     <br/><br/>
-    <form action="/mysql/select/techn" method="POST">
+    <form action="/mysql/select/" method="POST">
         <label for="submitSQLRequest">Choisissez quelle table afficher</label>
-        <select id="submitSQLRequest">
-		   <option value="adm">Administrateur</option>
-		   <option value="arr">Arrivée de la voiture</option>
-		   <option value="cli">Client</option>
-		   <option value="com">Commune</option>
-		   <option value="int">Intervention</option>
-		   <option value="techn">Technicien</option>
-		   <option value="voi">Voiture</option>
+        <select name="table" id="submitSQLRequest">
+            <option value="">--Choisissez une table--</option>
+            <option value="adm">Administrateur</option>
+            <option value="arr">Arrivée de la voiture</option>
+            <option value="cli">Client</option>
+            <option value="com">Commune</option>
+            <option value="int">Intervention</option>
+            <option value="techn">Technicien</option>
+            <option value="voi">Voiture</option>
 		</select>
 		<br><br>
         <input type="submit" value="Submit">
     </form>
-    <% console.log("\nFélicitations, vous êtes connecté à la page principale !\n") %> 
-    <% if (JSON.stringify(result)!=JSON.stringify([]) && JSON.stringify(result[0].idadm)!=JSON.stringify([])) { %>
-        <h3 id='table'>Table Technicien</h3>
+    <% console.log("\nFélicitations, vous êtes connecté à la page Affich !\n") %> 
+    <% if (nomTable!="") { %>
+        <h3 id='table'>Table <%= nomTable %></h3>
         <table id='table' class='center'>
             <thead>
                 <tr>
-                    <th colspan="1">idtechn</th>
-                    <th colspan="1">nom</th>
-                    <th colspan="1">prenom</th>
+                    <% for( let property in result[0] ) { %>
+                        <th colspan="1"><%= property %>  </th>
+                    <% } %>
                 </tr>
             </thead>
             <tbody>
                 <% result.forEach(element => { %>
-                    <tr>
-                        <td><%= element.idtechn %> </td>
-                        <td><%= element.nom %></td>
-                        <td><%= element.prenom %></td>
+                    <tr> 
+                    <% for( let property in element ) { %>
+                        <td><%= element[property] %></td>  
+                    <% } %>
                     </tr>
                 <% }) %>
             </tbody>

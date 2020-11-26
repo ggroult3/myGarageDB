@@ -2,9 +2,12 @@ const express = require('express') // Middleware Express utilisé pour créer le
 const app = express() // Création du serveur app
 const mysql = require('mysql') // Module mysql permettant la connexion de notre webapp au serveur de la base de données
 const ejs = require('ejs') // Module permettant le rendu HTML généré de manière dynamique (Embedded JavaScript)
+const bodyParser = require('body-parser') // Module permettant la gestion des paramètres de formulaire
+var urlecodedParser = bodyParser.urlencoded({extended:false})
 
 const PORT = process.env.PORT || 8080 // Définition du port sur lequel le serveur sera écouté
 
+var nom = "" // Contient le nom de la table à afficher
 var result = [] // Contient les résultats de la requête SQL demandé
 var result2 = [] // Contient les résultats de la requête SQL demandé
 var idvalue = [] // Contient les résultats de la requête SQL demandé
@@ -17,8 +20,7 @@ app.get('/',function(req,res){
 }) 
 
 app.get('/affich',function(req,res){
-  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user}) // Fait le rendu de techn.ejs lors d'une requête GET /
-  console.log(connection.config.user)
+  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user,nomTable:nom}) // Fait le rendu de techn.ejs lors d'une requête GET /
 
 }) 
 
@@ -65,14 +67,63 @@ app.post('/mysql/select/admin',function(req,res){ // Requête POST du formulaire
   res.redirect('/affich') // Fait une redirection à l'adresse principale
 }) 
 
-app.post('/mysql/select/techn',function(req,res){ // Requête POST du formulaire /mysql
+app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
   res.status(200)
-  console.log('Requête SQL envoyée !')
-  connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
-    if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
-    console.log(result);
-  });
+  switch (req.body.table){
+    case "adm":
+      nom = "Administrateur"
+      connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "arr":
+      nom = "Arrivée voiture"
+      connection.query("SELECT * FROM projet.arrivee_voiture", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "cli":
+      nom = "Client"
+      connection.query("SELECT * FROM projet.client", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "com":
+      nom = "Commune"
+      connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "int":
+      nom = "Intervenant"
+      connection.query("SELECT * FROM projet.intervention", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "techn":
+      nom = "Technicien"
+      connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "voi":
+      nom = "Voiture"
+      connection.query("SELECT * FROM projet.voiture", function (err, data) { // Effectue une requête SQL
+        if (err) throw err;
+        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+      })
+      break
+    case "":
+      result=[]
+      nom = ""
+      break
+  }
   res.redirect('/affich') // Fait une redirection à l'adresse test
 }) 
 
