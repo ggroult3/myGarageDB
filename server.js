@@ -1,5 +1,7 @@
 const express = require('express') // Middleware Express utilisé pour créer le serveur (gestion des différentes routes)
 const app = express() // Création du serveur app
+const http = require('http')
+const server = http.createServer(app)
 const mysql = require('mysql') // Module mysql permettant la connexion de notre webapp au serveur de la base de données
 const ejs = require('ejs') // Module permettant le rendu HTML généré de manière dynamique (Embedded JavaScript)
 const bodyParser = require('body-parser') // Module permettant la gestion des paramètres de formulaire
@@ -11,6 +13,7 @@ var nom = "" // Contient le nom de la table à afficher
 var result = [] // Contient les résultats de la requête SQL demandé
 var result2 = [] // Contient les résultats de la requête SQL demandé
 var idvalue = [] // Contient les résultats de la requête SQL demandé
+
 
 
 app.use('/',express.static(__dirname + '/assets')) // Permet l'utilisation des fichiers présents de le dossier /assets
@@ -53,18 +56,6 @@ app.get('/ajoutclient',function(req,res){
   });
 
 
-}) 
-
-
-app.post('/mysql/select/admin',function(req,res){ // Requête POST du formulaire /mysql
-  res.status(200)
-  console.log('Requête SQL envoyée !')
-  connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
-    if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
-    console.log(result);
-  });
-  res.redirect('/affich') // Fait une redirection à l'adresse principale
 }) 
 
 app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
@@ -127,30 +118,41 @@ app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du
   res.redirect('/affich') // Fait une redirection à l'adresse test
 }) 
 
-app.get('/conn/admi',function(req,res){ // Requête get du formulaire /mysql
+app.get('/conn/:user',function(req,res){
   res.status(200)
-  console.log("Connexion en tant qu'admin")
+  switch (req.params.user){
+    case "admi":
+      strUser = "admini"
+      strPass = "passadm"
+      break
+    case "techn":
+      strUser = "techni"
+      strPass = "passtech"
+      break
+  }
   connection = mysql.createConnection({
     host: "localhost",
-    user: "admini", // admini ou techni
-    password: "passadm" // passadm ou passtech
+    user: strUser, // admini ou techni
+    password: strPass // passadm ou passtech
   }); // Créée une connexion avec la base de données
-  res.redirect('/affich') // Fait une redirection à l'adresse test
-}) 
+  connection.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!")
+  })
+  res.redirect('/affich')
+})
 
-app.get('/conn/techn',function(req,res){ // Requête get du formulaire /mysql
-  res.status(200)
-  console.log("Connexion en tant que technicien")
-  connection = mysql.createConnection({
-    host: "localhost",
-    user: "techni", // admini ou techni
-    password: "passtech" // passadm ou passtech
-  }); // Créée une connexion avec la base de données
-  res.redirect('/affich') // Fait une redirection à l'adresse test
-}) 
-
-app.listen(PORT,() => { // Démarre le serveur en local sur le port PORT
+server.listen(PORT,() => { // Démarre le serveur en local sur le port PORT
   console.log('\nServeur démarré !')
   console.log('Ouvrez un navigateur et allez l\'adresse suivante :  localhost:' + PORT)
   console.log('Pour arrêter le serveur, faites CTRL+C dans son terminal/invite de commande')
-}) 
+})
+
+app.get('/quit',function(req,res){
+  connection.end(function(err){
+    if (err){
+      return console.log('error:'+err.message)
+    }
+    console.log('Close the database connection.')
+  })
+})
