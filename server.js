@@ -55,8 +55,106 @@ app.get('/ajoutclient',function(req,res){
 		
   });
 
+}) 
+
+app.get('/ajoutintervention',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutintervention.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT * FROM projet.client", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result);
+  });
+  connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result2);
+  });
+  connection.query("SELECT MAX(idinterv) FROM projet.intervention", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+	console.log(idmax)
+	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
+	valueidmax=Object.values(idmaxobj[0])[0]
+	if (!valueidmax){
+		idvalue=1
+		console.log('1')}
+	else{
+	idvalue=valueidmax+1
+	console.log('2')};
+		
+  });
 
 }) 
+
+
+app.get('/ajouttechnicien',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajouttechnicien.ejs',{idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT MAX(idtechn) FROM projet.technicien", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+	console.log(idmax)
+	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
+	valueidmax=Object.values(idmaxobj[0])[0]
+	if (!valueidmax){
+		idvalue=1
+		console.log('1')}
+	else{
+	idvalue=valueidmax+1
+	console.log('2')};
+		
+  });
+
+}) 
+
+app.get('/ajoutarrivee',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutarrivee.ejs',{result:result,result2:result2}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT * FROM projet.intervention", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result);
+  });
+  connection.query("SELECT * FROM projet.voiture", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result2);
+  });
+}) 
+
+app.get('/ajoutadministrateur',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutadministrateur.ejs',{idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT MAX(idadm) FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+	console.log(idmax)
+	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
+	valueidmax=Object.values(idmaxobj[0])[0]
+	if (!valueidmax){
+		idvalue=1
+		console.log('1')}
+	else{
+	idvalue=valueidmax+1
+	console.log('2')};
+		
+  });
+
+
+}) 
+
+app.get('/ajoutcommune',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutcommune.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  });
+  
+app.get('/ajoutvoiture',function(req,res){
+  res.status(200).render(__dirname + '/assets/ajoutvoiture.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  });
+ 
+
+
+
 
 app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
   res.status(200)

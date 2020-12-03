@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width = display-width, initial-scale = 1">
+    <meta name="author" content="Guillaume Groult et Antoine Valentin">
+    <meta name="description" content="Projet MOD 4.6 sur MySQL">
+	<link rel="stylesheet" href="../style.css">
+
+	<img src="../garage.png " width="150">
+
+    <title>MyGarageDB : Projet MOD 4.6</title>
+</head>
+
+<body>
+    <h1>Ajout dans la base de données</h1>
+    <p>Veuillez remplir le nom de la commune</p>
+    <br/><br/>
+    <form action="/mysql/insert/commune" method="POST">
+	  <div class="submitSQLRequest">
+		<label for="submitSQLRequest">Nom : </label>
+		<input id="nom" maxlength="45" required />
+	  </div>
+		<br><br>
+        <input type="submit" value="Submit"> 
+		<!-- Ne pas oublier de vérifier que ce nom n'a jamais été pris -->
+    </form>
+
+    <% console.log("\nFélicitations, vous êtes connecté à la page AjoutCommune !\n") %> 
+</body>
