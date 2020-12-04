@@ -51,12 +51,16 @@
             </thead>
             <tbody>
                 <% result.forEach(element => { %>
+				<form action="/update/<%= nomTable %>" method="POST">
                     <tr> 
                     <% for( let property in element ) { %>
-                        <td><%= element[property] %></td>  
+                        <td><%= element[property] %> </td> 
+						<input type="hidden" id="<%= property %>" name="<%= property %>" value="<%= element[property] %>"> 
                     <% } %>
-                    </tr>
+						<% if (nomTable=="Client") { %> <td><input type="submit" value="Modifier"></td>  <% } %>
+                    </tr></form>
                 <% }) %>
+				
             </tbody>
         </table>
     <% } %>

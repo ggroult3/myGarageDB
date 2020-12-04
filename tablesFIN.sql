@@ -15,7 +15,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
 --
 -- Table structure for table `administrateur`
 --
@@ -66,6 +65,7 @@ CREATE TABLE `arrivee_voiture` (
 
 LOCK TABLES `arrivee_voiture` WRITE;
 /*!40000 ALTER TABLE `arrivee_voiture` DISABLE KEYS */;
+INSERT INTO `arrivee_voiture` VALUES (1,'AA-124-DD','01/12/2020',132356),(2,'EX-142-EG','30/11/2020',87490);
 /*!40000 ALTER TABLE `arrivee_voiture` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,6 +96,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
+INSERT INTO `client` VALUES (1,'Chen','Liming','Paris',2),(2,'Morice','Samuel','Paris',1),(3,'Cetroix','Micheline','Lyon',3);
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,6 +120,7 @@ CREATE TABLE `commune` (
 
 LOCK TABLES `commune` WRITE;
 /*!40000 ALTER TABLE `commune` DISABLE KEYS */;
+INSERT INTO `commune` VALUES ('Lyon',1),('Paris',2),('Toulouse',0);
 /*!40000 ALTER TABLE `commune` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,7 +136,7 @@ CREATE TABLE `intervention` (
   `type` varchar(45) DEFAULT NULL,
   `idclient` int DEFAULT NULL,
   `idtechn` int DEFAULT NULL,
-  `remarque` varchar(45) DEFAULT NULL,
+  `remarque` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idinterv`),
   KEY `client_idx` (`idclient`),
   KEY `technicien_idx` (`idtechn`),
@@ -149,6 +151,7 @@ CREATE TABLE `intervention` (
 
 LOCK TABLES `intervention` WRITE;
 /*!40000 ALTER TABLE `intervention` DISABLE KEYS */;
+INSERT INTO `intervention` VALUES (1,'Forfaitaire',1,2,''),(2,'Non-forfaitaire',3,1,'');
 /*!40000 ALTER TABLE `intervention` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +177,7 @@ CREATE TABLE `technicien` (
 
 LOCK TABLES `technicien` WRITE;
 /*!40000 ALTER TABLE `technicien` DISABLE KEYS */;
-INSERT INTO `technicien` VALUES (1,'Bordereau','Patrick',15),(2,'El Khalaf','Matthieu',4),(3,'Victorien','Lisa',0);
+INSERT INTO `technicien` VALUES (1,'Patricia','Bordereau',15),(2,'Matthieu','El Khalaf',4),(3,'Lisa','Victorien',0);
 /*!40000 ALTER TABLE `technicien` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,6 +202,7 @@ CREATE TABLE `voiture` (
 
 LOCK TABLES `voiture` WRITE;
 /*!40000 ALTER TABLE `voiture` DISABLE KEYS */;
+INSERT INTO `voiture` VALUES ('AA-124-DD','Citroën','Xsara'),('EX-142-EG','Peugeot','308'),('MR-459-JR','Renault','Scénic');
 /*!40000 ALTER TABLE `voiture` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -210,7 +214,6 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
 
 create user if not exists admini@localhost identified by 'passadm';
 grant all privileges on projet.* to admini@localhost;
@@ -226,4 +229,5 @@ grant SELECT, INSERT, UPDATE on projet.voiture to techni@localhost;
 grant SELECT, INSERT, UPDATE on projet.commune to techni@localhost;
 ALTER USER 'techni'@localhost IDENTIFIED WITH mysql_native_password BY 'passtech';
 FLUSH PRIVILEGES;
--- Dump completed on 2020-11-11 13:18:22
+
+-- Dump completed on 2020-12-04 18:37:45

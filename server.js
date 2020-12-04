@@ -161,6 +161,29 @@ app.get('/ajoutvoiture',function(req,res){
   res.status(200).render(__dirname + '/assets/ajoutvoiture.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
   });
  
+app.post('/update/Client',urlecodedParser,function(req,res){
+  res.status(200).render(__dirname + '/assets/modifclient.ejs',{result:result,result2:result2,body:req.body}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  console.log(req.body)
+  console.log('Requête SQL envoyée !')
+  connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result);
+  });
+  connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
+    if (err) throw err;
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    console.log(result2);
+  });
+
+}) 
+
+app.post('/update/Commune',urlecodedParser,function(req,res){
+  res.status(200).render(__dirname + '/assets/modifcommune.ejs',{result:result,result2:result2,body:req.body}) // Fait le rendu de techn.ejs lors d'une requête GET /
+
+}) 
+
+
 
 app.post('/mysql/insert/client',urlecodedParser,function(req,res){
   res.status(200)
@@ -179,13 +202,72 @@ app.post('/mysql/insert/client',urlecodedParser,function(req,res){
     console.log(dataObject)
     nbClients = dataObject[0].nb_clients + 1
     console.log("Dans connection.query : " + nbClients)
-    connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
-      if(err) throw err;
-      console.log("Mise à jour de nb_clients dans projet.commune")
-    })
+	connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
+    if(err) throw err;
+    console.log("Mise à jour de nb_clients dans projet.commune")
+  })
+  
   })
 
+
+  res.redirect("/affich")
+})
+
+app.post('/mysql/update/client',urlecodedParser,function(req,res){
+  res.status(200)
+  console.log(req.body)
+  connection.query("SELECT adresse FROM projet.client WHERE idclient=? ",[req.body.idclient],function(err,data){
+    if (err) throw err;
+    console.log("Selection de l'ancienne adresse du client")
+    console.log(data)
+    dataObject = JSON.parse(JSON.stringify(data))
+    console.log(dataObject)
+    ancienneAdr = dataObject[0].adresse
+    console.log("Dans connection.query : " + ancienneAdr)
+	
+	connection.query("UPDATE projet.client SET nom=?, prenom=?, adresse=?, idadmin=? WHERE idclient = ?",[req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin,req.body.idclient],function(err,data){
+    if (err) throw err;
+    console.log("Modification du client")
+
+	if (ancienneAdr != req.body.adresse){
+		console.log("Changement d'adresse")
+		
+		  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
+			if (err) throw err;
+			console.log("Selection de nb_clients dans projet.commune")
+			console.log(data)
+			dataObject = JSON.parse(JSON.stringify(data))
+			console.log(dataObject)
+			nbClients = dataObject[0].nb_clients + 1
+			console.log("Dans connection.query : " + nbClients)
+			connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
+			if(err) throw err;
+			console.log("Mise à jour de nb_clients dans projet.commune")
+			
+		  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[ancienneAdr],function(err,data){
+			if (err) throw err;
+			console.log("Selection de nb_clients dans projet.commune")
+			console.log(data)
+			dataObject = JSON.parse(JSON.stringify(data))
+			console.log(dataObject)
+			nbClients = dataObject[0].nb_clients - 1
+			console.log("Dans connection.query : " + nbClients)
+			connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,ancienneAdr],function(err,data){
+			if(err) throw err;
+			console.log("Mise à jour de nb_clients dans projet.commune")
+			  })
+			  
+			  })
+
+		  })
+		  
+		  })
+	}
   
+  })
+  
+  })
+
 
   res.redirect("/affich")
 })
@@ -238,7 +320,7 @@ app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST ef
       })
       break
     case "int":
-      nom = "Intervenant"
+      nom = "Intervention"
       connection.query("SELECT * FROM projet.intervention", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
         result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
