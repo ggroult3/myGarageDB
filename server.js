@@ -182,7 +182,7 @@ app.post('/update/Commune',urlecodedParser,function(req,res){
 
 }) 
 
-app.post('mysql/insert/:table',urlecodedParser,function(req,res){
+app.post('/mysql/insert/:table',urlecodedParser,function(req,res){
   res.status(200)
   console.log(req.body)
   SQLRequest = "INSERT INTO projet." + req.params.table + " VALUES "
@@ -213,15 +213,24 @@ app.post('mysql/insert/:table',urlecodedParser,function(req,res){
       break;
   
     case "commune":
-      SQLRequest = SQLRequest + "(?,0)"
-      SQLvalues = [req.body.nom]
-      console.log(SQLRequest)
-      console.log(SQLvalues)
-      connection.query(SQLRequest,SQLvalues,function(err,data){
-        if (err) throw err;
-        console.log("Ajout de commune fait")
+	  connection.query("SELECT COUNT(*) FROM projet.commune WHERE nom=? ",[req.body.nom],function(err,data){
+		  if (err) throw err;
+			testunicite = data
+		  	testuniciteobj=JSON.parse(JSON.stringify(testunicite)); 
+			testuniciteval=Object.values(testunicite[0])[0]
+			console.log(testuniciteval)
+			if (testuniciteval == 0){ 
+			// S'il n'existe paz de commune de ce nom dans la BDD, on la rajoute
+			  SQLRequest = SQLRequest + "(?,0)"
+			  SQLvalues = [req.body.nom]
+			  console.log(SQLRequest)
+			  console.log(SQLvalues)
+			  connection.query(SQLRequest,SQLvalues,function(err,data){
+				if (err) throw err;
+				console.log("Ajout de commune fait")
+			  })
+			}
       })
-      
       break;
     
     case "administrateur":
@@ -236,14 +245,25 @@ app.post('mysql/insert/:table',urlecodedParser,function(req,res){
 
       break
     case "arrivee_voiture":
-      SQLRequest = SQLRequest + "(?,?,?,?)"
-      SQLvalues = [req.body.idinterv,req.body.plaque,req.body.date_arrivee,req.body.kilometrage]
-      console.log(SQLRequest)
-      console.log(SQLvalues)
-      connection.query(SQLRequest,SQLvalues,function(err,data){
-        if (err) throw err;
-        console.log("Ajout d'arrivée de voiture fait")
-      })
+		connection.query("SELECT COUNT(*) FROM projet.arrivee_voiture WHERE idinterv=? ",[req.body.idinterv],function(err,data){
+		  if (err) throw err;
+			testunicite = data
+			testuniciteobj=JSON.parse(JSON.stringify(testunicite)); 
+			testuniciteval=Object.values(testunicite[0])[0]
+			console.log(testuniciteval)
+			if (testuniciteval == 0){ 
+		// S'il n'existe pas d'arrivée voiture de l'intervention, on la rajoute
+
+			  SQLRequest = SQLRequest + "(?,?,?,?)"
+			  SQLvalues = [req.body.idinterv,req.body.immatriculation,req.body.date_arrivee,req.body.kilometrage]
+			  console.log(SQLRequest)
+			  console.log(SQLvalues)
+			  connection.query(SQLRequest,SQLvalues,function(err,data){
+				if (err) throw err;
+				console.log("Ajout d'arrivée de voiture fait")
+			  })
+			}
+        })
 
       break
     case "intervention":
@@ -270,7 +290,6 @@ app.post('mysql/insert/:table',urlecodedParser,function(req,res){
           console.log("Mise à jour de nb_clients dans projet.technicien")
         })
       })
-      connection.query("SELECT nb_voitures_reparees")
 
       break
     case "technicien":
@@ -285,13 +304,24 @@ app.post('mysql/insert/:table',urlecodedParser,function(req,res){
 
       break
     case "voiture":
-      SQLRequest = SQLRequest + "(?,?,?)"
-      SQLvalues = [req.body.immatriculation,req.body.marque,req.body.type]
-      console.log(SQLRequest)
-      console.log(SQLvalues)
-      connection.query(SQLRequest,SQLvalues,function(err,data){
-        if (err) throw err;
-        console.log("Ajout de voiture fait")
+	  connection.query("SELECT COUNT(*) FROM projet.voiture WHERE immatriculation=? ",[req.body.immatriculation],function(err,data){
+		  if (err) throw err;
+			testunicite = data
+			testuniciteobj=JSON.parse(JSON.stringify(testunicite)); 
+			testuniciteval=Object.values(testunicite[0])[0]
+			console.log(testuniciteval)
+			if (testuniciteval == 0){ 
+		// S'il n'existe paz de voiture avec cette immatriculation dans la BDD, on la rajoute
+
+			  SQLRequest = SQLRequest + "(?,?,?)"
+			  SQLvalues = [req.body.immatriculation,req.body.marque,req.body.type]
+			  console.log(SQLRequest)
+			  console.log(SQLvalues)
+			  connection.query(SQLRequest,SQLvalues,function(err,data){
+				if (err) throw err;
+				console.log("Ajout de voiture fait")
+			  })
+			}
       })
       break
   }

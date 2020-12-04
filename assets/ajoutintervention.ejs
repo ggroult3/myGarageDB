@@ -16,7 +16,7 @@
     <h1>Ajout dans la base de données</h1>
     <p>Veuillez remplir les attributs de l'intervention</p>
     <br/><br/>
-    <form action="/mysql/insert/client" method="POST">
+    <form action="/mysql/insert/intervention" method="POST">
 	  <div class="submitSQLRequest">
 		<label for="idInterv">ID : <%= idvalue %></label>
 		<input type="hidden" name="idinterv" id="idInterv" value="<%= idvalue %>"/>
@@ -54,7 +54,7 @@
       </div>
 	  <div class="submitSQLRequest">
 		<label for="remarqueInterv">Remarques : </label>
-		<input id="remarqueInterv" name="remarque" maxlength="45" required />
+		<input id="remarqueInterv" name="remarque" maxlength="45" />
 	  </div>
 
 
