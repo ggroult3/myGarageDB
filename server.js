@@ -30,35 +30,35 @@ app.get('/',function(req,res){
 }) 
 
 app.get('/affich',function(req,res){
-  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user,nomTable:nom}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/affich.ejs',{result:result,user:connection.config.user,nomTable:nom}) // Fait le rendu de affich.ejs lors d'une requête GET /affich
 
 }) 
 
 app.get('/ajoutclient',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutclient.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutclient.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de ajoutclient.ejs lors d'une requête GET /ajoutclient
   console.log('Requête SQL envoyée !')
   connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result = data // Stocke les résultats de la requête SQL pour le rendu de ajoutclient.ejs
     console.log(result);
   });
   connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de ajoutclient.ejs
     console.log(result2);
   });
   connection.query("SELECT MAX(idclient) FROM projet.client", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de ajoutclient.ejs
 	console.log(idmax)
 	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
-	valueidmax=Object.values(idmaxobj[0])[0]
-	if (!valueidmax){
+	valueidmax=Object.values(idmaxobj[0])[0] // ID max parmi les clients de la BDD
+	if (!valueidmax){ // S'il n'y en n'a pas, la valeur de l'ID du nouveau client sera 
 		idvalue=1
     console.log('1')
   }
 	else{
-	  idvalue=valueidmax+1
+	  idvalue=valueidmax+1 // Sinon, ce sera ID max + 1
     console.log('2')
   };
 		
@@ -67,21 +67,21 @@ app.get('/ajoutclient',function(req,res){
 }) 
 
 app.get('/ajoutintervention',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutintervention.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutintervention.ejs',{result:result,result2:result2,idvalue:idvalue}) // Fait le rendu de ajoutintervention.ejs lors d'une requête GET /ajoutintervention
   console.log('Requête SQL envoyée !')
   connection.query("SELECT * FROM projet.client", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result = data // Stocke les résultats de la requête SQL pour le rendu de ajoutintervention.ejs
     console.log(result);
   });
   connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de ajoutintervention.ejs
     console.log(result2);
   });
   connection.query("SELECT MAX(idinterv) FROM projet.intervention", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de ajoutintervention.ejs
 	console.log(idmax)
 	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
 	valueidmax=Object.values(idmaxobj[0])[0]
@@ -97,11 +97,11 @@ app.get('/ajoutintervention',function(req,res){
 }) 
 
 app.get('/ajouttechnicien',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajouttechnicien.ejs',{idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajouttechnicien.ejs',{idvalue:idvalue}) // Fait le rendu de ajouttechnicien.ejs lors d'une requête GET /ajouttechnicien
   console.log('Requête SQL envoyée !')
   connection.query("SELECT MAX(idtechn) FROM projet.technicien", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de ajouttechnicien.ejs
 	console.log(idmax)
 	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
 	valueidmax=Object.values(idmaxobj[0])[0]
@@ -117,26 +117,26 @@ app.get('/ajouttechnicien',function(req,res){
 }) 
 
 app.get('/ajoutarrivee',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutarrivee.ejs',{result:result,result2:result2}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutarrivee.ejs',{result:result,result2:result2}) // Fait le rendu de ajoutarrivee.ejs lors d'une requête GET /ajoutarrivee
   console.log('Requête SQL envoyée !')
   connection.query("SELECT * FROM projet.intervention", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result = data // Stocke les résultats de la requête SQL pour le rendu de ajoutarrivee.ejs
     console.log(result);
   });
   connection.query("SELECT * FROM projet.voiture", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de ajoutarrivee.ejs
     console.log(result2);
   });
 }) 
 
 app.get('/ajoutadministrateur',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutadministrateur.ejs',{idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutadministrateur.ejs',{idvalue:idvalue}) // Fait le rendu de ajoutadministrateur.ejs lors d'une requête GET /ajoutadministrateur
   console.log('Requête SQL envoyée !')
   connection.query("SELECT MAX(idadm) FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    idmax = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    idmax = data // Stocke les résultats de la requête SQL pour le rendu de ajoutadministrateur.ejs
 	console.log(idmax)
 	idmaxobj=JSON.parse(JSON.stringify(idmax)); 
 	valueidmax=Object.values(idmaxobj[0])[0]
@@ -153,61 +153,57 @@ app.get('/ajoutadministrateur',function(req,res){
 }) 
 
 app.get('/ajoutcommune',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutcommune.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutcommune.ejs',{result:result}) // Fait le rendu de ajoutcommune.ejs lors d'une requête GET /ajoutcommune
   });
   
 app.get('/ajoutvoiture',function(req,res){
-  res.status(200).render(__dirname + '/assets/ajoutvoiture.ejs',{result:result}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/ajoutvoiture.ejs',{result:result}) // Fait le rendu de ajoutvoiture.ejs lors d'une requête GET /ajoutvoiture
   });
  
 app.post('/update/Client',urlecodedParser,function(req,res){
-  res.status(200).render(__dirname + '/assets/modifclient.ejs',{result:result,result2:result2,body:req.body}) // Fait le rendu de techn.ejs lors d'une requête GET /
+  res.status(200).render(__dirname + '/assets/modifclient.ejs',{result:result,result2:result2,body:req.body}) // Fait le rendu de modifclient.ejs lors d'une requête GET /update/Client
   console.log(req.body)
   console.log('Requête SQL envoyée !')
   connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result = data // Stocke les résultats de la requête SQL pour le rendu de modifclient.ejs
     console.log(result);
   });
   connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
     if (err) throw err;
-    result2 = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+    result2 = data // Stocke les résultats de la requête SQL pour le rendu de modifclient.ejs
     console.log(result2);
   });
 
 }) 
 
-app.post('/update/Commune',urlecodedParser,function(req,res){
-  res.status(200).render(__dirname + '/assets/modifcommune.ejs',{result:result,result2:result2,body:req.body}) // Fait le rendu de techn.ejs lors d'une requête GET /
-
-}) 
 
 app.post('/mysql/insert/:table',urlecodedParser,function(req,res){
   res.status(200)
   console.log(req.body)
-  SQLRequest = "INSERT INTO projet." + req.params.table + " VALUES "
+  SQLRequest = "INSERT INTO projet." + req.params.table + " VALUES " // La requête SQL sera une insertion dans la table demandée
   switch (req.params.table) {
     case "client":
       SQLRequest = SQLRequest + "(?,?,?,?,?)"
-      SQLvalues = [req.body.idclient,req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin]
+      SQLvalues = [req.body.idclient,req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin] // valeurs qui seront insérées
       connection.query(SQLRequest,SQLvalues,function(err,data){
         if (err) throw err;
         console.log("Insertion du nouveau client")
       })
 
-      var nbClients = 9
+      var nbClients = 9 // initialisation de la variable nbClients
       connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
         if (err) throw err;
         console.log("Selection de nb_clients dans projet.commune")
         console.log(data)
         dataObject = JSON.parse(JSON.stringify(data))
         console.log(dataObject)
-        nbClients = dataObject[0].nb_clients + 1
+        nbClients = dataObject[0].nb_clients + 1 // On calcule le nb de clients de la commune + 1
         console.log("Dans connection.query : " + nbClients)
 
         connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
           if(err) throw err;
-          console.log("Mise à jour de nb_clients dans projet.commune")
+          console.log("Mise à jour de nb_clients dans projet.commune") // Et on insère cette valeur dans la table
         })
       })
       break;
@@ -220,7 +216,7 @@ app.post('/mysql/insert/:table',urlecodedParser,function(req,res){
 			testuniciteval=Object.values(testunicite[0])[0]
 			console.log(testuniciteval)
 			if (testuniciteval == 0){ 
-			// S'il n'existe paz de commune de ce nom dans la BDD, on la rajoute
+			// S'il n'existe paz de commune de ce nom dans la BDD, on la rajoute (sinon on ne fait rien)
 			  SQLRequest = SQLRequest + "(?,0)"
 			  SQLvalues = [req.body.nom]
 			  console.log(SQLRequest)
@@ -333,7 +329,7 @@ app.post('/mysql/update/client',urlecodedParser,function(req,res){
   console.log(req.body)
   connection.query("SELECT adresse FROM projet.client WHERE idclient=? ",[req.body.idclient],function(err,data){
     if (err) throw err;
-    console.log("Selection de l'ancienne adresse du client")
+    console.log("Selection de l'ancienne adresse du client") //Selection de l'ancienne adresse du client
     console.log(data)
     dataObject = JSON.parse(JSON.stringify(data))
     console.log(dataObject)
@@ -349,7 +345,7 @@ app.post('/mysql/update/client',urlecodedParser,function(req,res){
 		
 		  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
 			if (err) throw err;
-			console.log("Selection de nb_clients dans projet.commune")
+			console.log("Selection de nb_clients dans projet.commune") //Selection de nb_clients dans la nouvelle commune
 			console.log(data)
 			dataObject = JSON.parse(JSON.stringify(data))
 			console.log(dataObject)
@@ -357,11 +353,11 @@ app.post('/mysql/update/client',urlecodedParser,function(req,res){
 			console.log("Dans connection.query : " + nbClients)
 			connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
 			if(err) throw err;
-			console.log("Mise à jour de nb_clients dans projet.commune")
+			console.log("Mise à jour de nb_clients dans projet.commune") // On itère ce nb_clients de 1
 			
 		  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[ancienneAdr],function(err,data){
 			if (err) throw err;
-			console.log("Selection de nb_clients dans projet.commune")
+			console.log("Selection de nb_clients dans projet.commune") //Selection de nb_clients dans l'ancienne commune
 			console.log(data)
 			dataObject = JSON.parse(JSON.stringify(data))
 			console.log(dataObject)
@@ -369,7 +365,7 @@ app.post('/mysql/update/client',urlecodedParser,function(req,res){
 			console.log("Dans connection.query : " + nbClients)
 			connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,ancienneAdr],function(err,data){
 			if(err) throw err;
-			console.log("Mise à jour de nb_clients dans projet.commune")
+			console.log("Mise à jour de nb_clients dans projet.commune") // On baisse cette valeur de 1
 			  })
 			  
 			  })
@@ -395,49 +391,49 @@ app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST ef
       nom = "Administrateur"
       connection.query("SELECT * FROM projet.administrateur", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "arr":
       nom = "Arrivée voiture"
       connection.query("SELECT * FROM projet.arrivee_voiture", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "cli":
       nom = "Client"
       connection.query("SELECT * FROM projet.client", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "com":
       nom = "Commune"
       connection.query("SELECT * FROM projet.commune", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "int":
       nom = "Intervention"
       connection.query("SELECT * FROM projet.intervention", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "techn":
       nom = "Technicien"
       connection.query("SELECT * FROM projet.technicien", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "voi":
       nom = "Voiture"
       connection.query("SELECT * FROM projet.voiture", function (err, data) { // Effectue une requête SQL
         if (err) throw err;
-        result = data // Stocke les résultats de la requête SQL pour le rendu de index.ejs
+        result = data // Stocke les résultats de la requête SQL pour le rendu de affich.ejs
       })
       break
     case "":
@@ -445,14 +441,14 @@ app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST ef
       nom = ""
       break
   }
-  res.redirect('/affich') // Fait une redirection à l'adresse test
+  res.redirect('/affich') // Fait une redirection à l'adresse affich
 }) 
 
-app.post('/choixajout/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
+app.post('/choixajout/',urlecodedParser,function(req,res){ // Requête POST qui redirige vers la page d'ajout correspondante
   res.status(200)
   switch (req.body.table){
     case "adm":
-	  if (connection.config.user=="techni") {
+	  if (connection.config.user=="techni") { //  Si l'utilisateur est un technicien, il n'a pas le droit d'accéder à cette page
 		res.redirect('/affich')
 	  } else {
 		res.redirect('/ajoutadministrateur')}
@@ -470,7 +466,7 @@ app.post('/choixajout/',urlecodedParser,function(req,res){ // Requête POST du f
       res.redirect('/ajoutintervention')
       break
     case "techn":
-	  if (connection.config.user=="techni") {
+	  if (connection.config.user=="techni") { //  Si l'utilisateur est un technicien, il n'a pas le droit d'accéder à cette page
 		res.redirect('/affich')
 	  } else {
         res.redirect('/ajouttechnicien')}
@@ -514,7 +510,7 @@ server.listen(PORT,() => { // Démarre le serveur en local sur le port PORT
   console.log('Pour arrêter le serveur, faites CTRL+C dans son terminal/invite de commande')
 })
 
-app.get('/quit',function(req,res){
+app.get('/quit',function(req,res){ // Ferme la connexion
   connection.end(function(err){
     if (err){
       return console.log('error:'+err.message)
