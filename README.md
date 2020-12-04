@@ -14,7 +14,7 @@ Ce projet est une application du cours MOD 4.6 "Système de base de données" de
 Télécharger NodeJS sur https://nodejs.org/en/download/
 
 ## Installation des modules
-Dans le dossier téléchargé, exécuter la commande *npm install* via une invite de commande (donc après avoir fait *cd <emplacement du dossier>*
+Dans le dossier téléchargé, exécuter la commande *npm install* via une invite de commande (donc après avoir fait *cd {emplacement du dossier}*
 
 ## Lancement du serveur
 Dans l'invite de commande (toujours dans le même dossier), taper *node server.js*
