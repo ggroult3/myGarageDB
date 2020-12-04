@@ -1,10 +1,10 @@
-const express = require('express') // Middleware Express utilisé pour créer le serveur (gestion des différentes routes)
+const express = require('express') // Framework Express utilisé pour créer le serveur (gestion des différentes routes)
 const app = express() // Création du serveur app
 const http = require('http')
 const server = http.createServer(app)
-const mysql = require('mysql') // Module mysql permettant la connexion de notre webapp au serveur de la base de données
-const ejs = require('ejs') // Module permettant le rendu HTML généré de manière dynamique (Embedded JavaScript)
-const bodyParser = require('body-parser') // Module permettant la gestion des paramètres de formulaire
+const mysql = require('mysql') // Middleware mysql permettant la connexion de notre webapp au serveur de la base de données
+const ejs = require('ejs') // Middleware permettant le rendu HTML généré de manière dynamique (Embedded JavaScript)
+const bodyParser = require('body-parser') // Middleware permettant la gestion des paramètres de formulaire
 const session = require('express-session')
 var urlecodedParser = bodyParser.urlencoded({extended:false})
 
