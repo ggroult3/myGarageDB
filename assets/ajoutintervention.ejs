@@ -18,20 +18,22 @@
     <br/><br/>
     <form action="/mysql/insert/client" method="POST">
 	  <div class="submitSQLRequest">
-		ID : <%= idvalue %>
+		<label for="idInterv">ID : <%= idvalue %></label>
+		<input type="hidden" name="idinterv" id="idInterv" value="<%= idvalue %>"/>
 	  </div>
-	  <div class="submitSQLRequest">Type de contrat</label>
-        <select id="submitSQLRequest">
-			<option>Forfaitaire</option>
-			<option>Non-forfaitaire</option>
+	  <div class="submitSQLRequest">
+		  <label for="typeInterv">Type de contrat</label>
+        <select id="typeInterv" name="type">
+			<option value="Forfaitaire">Forfaitaire</option>
+			<option value="Non-forfaitaire">Non-forfaitaire</option>
 		</select>
 	  </div>
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">ID client</label>
-        <select id="submitSQLRequest">
+		<label for="idClient">ID client</label>
+        <select id="idClient" name="idclient">
 		<% if (JSON.stringify(result)!=JSON.stringify([])) { %>
 			<% result.forEach(element => { %>
-			<option><%= element.idclient %></option>    
+			<option value="<%= element.idclient %>"><%= element.idclient %></option>    
 			<% }) %>
 
 		<% } %>
@@ -39,11 +41,11 @@
 		</select>
       </div>
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">ID technicien</label>
-        <select id="submitSQLRequest">
+		<label for="idTechn">ID technicien</label>
+        <select id="idTechn" name="idtechn">
 		<% if (JSON.stringify(result2)!=JSON.stringify([])) { %>
 			<% result2.forEach(element => { %>
-			<option><%= element.idtechn %></option>    
+			<option value="<%= element.idtechn %>"><%= element.idtechn %></option>    
 			<% }) %>
 
 		<% } %>
@@ -51,8 +53,8 @@
 		</select>
       </div>
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Remarques : </label>
-		<input id="remarque" maxlength="45" required />
+		<label for="remarqueInterv">Remarques : </label>
+		<input id="remarqueInterv" name="remarque" maxlength="45" required />
 	  </div>
 
 

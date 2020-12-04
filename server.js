@@ -96,7 +96,6 @@ app.get('/ajoutintervention',function(req,res){
 
 }) 
 
-
 app.get('/ajouttechnicien',function(req,res){
   res.status(200).render(__dirname + '/assets/ajouttechnicien.ejs',{idvalue:idvalue}) // Fait le rendu de techn.ejs lors d'une requête GET /
   console.log('Requête SQL envoyée !')
@@ -183,33 +182,119 @@ app.post('/update/Commune',urlecodedParser,function(req,res){
 
 }) 
 
-
-
-app.post('/mysql/insert/client',urlecodedParser,function(req,res){
+app.post('mysql/insert/:table',urlecodedParser,function(req,res){
   res.status(200)
   console.log(req.body)
-  connection.query("INSERT INTO projet.client VALUES (?,?,?,?,?)",[req.body.idclient,req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin],function(err,data){
-    if (err) throw err;
-    console.log("Insertion du nouveau client")
-  })
+  SQLRequest = "INSERT INTO projet." + req.params.table + " VALUES "
+  switch (req.params.table) {
+    case "client":
+      SQLRequest = SQLRequest + "(?,?,?,?,?)"
+      SQLvalues = [req.body.idclient,req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin]
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Insertion du nouveau client")
+      })
 
-  var nbClients = 9
-  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
-    if (err) throw err;
-    console.log("Selection de nb_clients dans projet.commune")
-    console.log(data)
-    dataObject = JSON.parse(JSON.stringify(data))
-    console.log(dataObject)
-    nbClients = dataObject[0].nb_clients + 1
-    console.log("Dans connection.query : " + nbClients)
-	connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
-    if(err) throw err;
-    console.log("Mise à jour de nb_clients dans projet.commune")
-  })
+      var nbClients = 9
+      connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
+        if (err) throw err;
+        console.log("Selection de nb_clients dans projet.commune")
+        console.log(data)
+        dataObject = JSON.parse(JSON.stringify(data))
+        console.log(dataObject)
+        nbClients = dataObject[0].nb_clients + 1
+        console.log("Dans connection.query : " + nbClients)
+
+        connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
+          if(err) throw err;
+          console.log("Mise à jour de nb_clients dans projet.commune")
+        })
+      })
+      break;
   
-  })
+    case "commune":
+      SQLRequest = SQLRequest + "(?,0)"
+      SQLvalues = [req.body.nom]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout de commune fait")
+      })
+      
+      break;
+    
+    case "administrateur":
+      SQLRequest = SQLRequest + "(?,?,?)"
+      SQLvalues = [req.body.idadmin,req.body.nom,req.body.prenom]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout d\'administrateur fait")
+      })
 
+      break
+    case "arrivee_voiture":
+      SQLRequest = SQLRequest + "(?,?,?,?)"
+      SQLvalues = [req.body.idinterv,req.body.plaque,req.body.date_arrivee,req.body.kilometrage]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout d'arrivée de voiture fait")
+      })
 
+      break
+    case "intervention":
+      SQLRequest = SQLRequest + "(?,?,?,?,?)"
+      SQLvalues = [req.body.idinterv,req.body.type,req.body.idclient,req.body.idtechn,req.body.remarque]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout d\'intervention fait")
+      })
+      var nbVoitures = 9
+      connection.query("SELECT nb_voiture_reparees FROM projet.technicien WHERE idtechn=? ",[req.body.idtechn],function(err,data){
+        if (err) throw err;
+        console.log("Selection de nb_voiture_reparees dans projet.technicien")
+        console.log(data)
+        dataObject = JSON.parse(JSON.stringify(data))
+        console.log(dataObject)
+        nbVoitures = dataObject[0].nb_voiture_reparees + 1
+        console.log("Dans connection.query : " + nbVoitures)
+
+        connection.query("UPDATE projet.technicien SET nb_voiture_reparees=? WHERE idtechn=?",[nbVoitures,req.body.idtechn],function(err,data){
+          if(err) throw err;
+          console.log("Mise à jour de nb_clients dans projet.technicien")
+        })
+      })
+      connection.query("SELECT nb_voitures_reparees")
+
+      break
+    case "technicien":
+      SQLRequest = SQLRequest + "(?,?,?,0)"
+      SQLvalues = [req.body.idtechn,req.body.nom,req.body.prenom]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout de technicien fait")
+      })
+
+      break
+    case "voiture":
+      SQLRequest = SQLRequest + "(?,?,?)"
+      SQLvalues = [req.body.immatriculation,req.body.marque,req.body.type]
+      console.log(SQLRequest)
+      console.log(SQLvalues)
+      connection.query(SQLRequest,SQLvalues,function(err,data){
+        if (err) throw err;
+        console.log("Ajout de voiture fait")
+      })
+      break
+  }
   res.redirect("/affich")
 })
 
@@ -271,21 +356,6 @@ app.post('/mysql/update/client',urlecodedParser,function(req,res){
 
   res.redirect("/affich")
 })
-
-app.post('/mysql/insert/commune',urlecodedParser,function(req,res){
-  res.status(200)
-  console.log(req.body)
-  SQLRequest = "INSERT INTO projet.commune VALUES (?,0)"
-  SQLvalues = [req.body.nom]
-  console.log(SQLRequest)
-  console.log(SQLvalues)
-  connection.query(SQLRequest,SQLvalues,function(err,data){
-    if (err) throw err;
-    console.log("Ajout de commune fait")
-  })
-  res.redirect("/affich")
-})
-
 
 app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST effectuée à la suite du formulaire de la page affich.ejs. Cette requête a pour de récupérer les données de la table à afficher
   res.status(200)
@@ -383,9 +453,6 @@ app.post('/choixajout/',urlecodedParser,function(req,res){ // Requête POST du f
       break
   }
 }) 
-
-
-
 
 app.get('/conn/:user',function(req,res){
   res.status(200)

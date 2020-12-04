@@ -18,22 +18,22 @@
     <br/><br/>
     <form action="/mysql/insert/arrivee" method="POST">
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">ID de l'intervention</label>
-        <select id="submitSQLRequest">
+		<label for="idInterv">ID de l'intervention</label>
+        <select id="idInterv" name="idinterv">
 		<% if (JSON.stringify(result)!=JSON.stringify([])) { %>
 			<% result.forEach(element => { %>
-			<option><%= element.idinterv %></option>    
+			<option value="<%= element.idinterv %>"><%= element.idinterv %></option>    
 			<% }) %>
 		<% } %>
 
 		</select>
 	  </div>
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Plaque d'immatriculation</label>
-        <select id="submitSQLRequest">
+		<label for="immatriculationVoiture">Plaque d'immatriculation</label>
+        <select id="immatriculationVoiture" name="immatriculation">
 		<% if (JSON.stringify(result2)!=JSON.stringify([])) { %>
 			<% result2.forEach(element => { %>
-			<option><%= element.immatriculation %></option>    
+			<option value="<%= element.immatriculation %>"><%= element.immatriculation %></option>    
 			<% }) %>
 
 		<% } %>
@@ -42,12 +42,12 @@
       </div>
 
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Date d'arrivée : </label>
-		<input id="date" maxlength="45" required />
+		<label for="dateArr">Date d'arrivée : </label>
+		<input id="dateArr" name="date_arrivee" maxlength="45" required />
 	  </div>
 	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Kilométrage (nombre entier) : </label>
-		<input id="kilometrage" type="number" step="1" required />
+		<label for="kilometrageVoiture">Kilométrage (nombre entier) : </label>
+		<input id="kilometrageVoiture" name="kilometrage" type="number" step="1" required />
 	  </div>
 
 		<br><br>
