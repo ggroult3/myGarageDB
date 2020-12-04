@@ -16,48 +16,46 @@
     <h1>Ajout dans la base de données</h1>
     <p>Veuillez remplir les attributs du client</p>
     <br/><br/>
-    <form action="/mysql/insert/client" method="POST">
-	  <div class="submitSQLRequest">
-		ID : <%= idvalue %>
-	  </div>
-	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Nom : </label>
-		<input id="nom" required />
-	  </div>
-	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Prénom : </label>
-		<input id="prenom" required />
-	  </div>
-	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">Commune</label>
-        <select id="submitSQLRequest">
-		<% if (JSON.stringify(result)!=JSON.stringify([])) { %>
-			<% result.forEach(element => { %>
-			<option><%= element.nom %></option>    
-			<% }) %>
-
-		<% } %>
-
-		</select>
-      </div>
-	  <div class="submitSQLRequest">
-		<label for="submitSQLRequest">ID administrateur</label>
-        <select id="submitSQLRequest">
-		<% if (JSON.stringify(result2)!=JSON.stringify([])) { %>
-			<% result2.forEach(element => { %>
-			<option><%= element.idadm %></option>    
-			<% }) %>
-
-		<% } %>
-
-		</select>
-      </div>
-
-
-
+	<form action="/mysql/insert/client" method="POST">
+		<div>
+			<label for="idClient">ID : <%= idvalue %></label>
+			<input type="hidden" name="idclient" id="idClient" value="<%= idvalue %>"/>
+		</div>
+		
+		<div>
+			<label for="nomClient">Nom : </label>
+			<input type="text" name="nom" id="nomClient" required />
+		</div>
+		
+		<div>
+			<label for="prenomClient">Prénom : </label>
+			<input type="text" name="prenom" id ="prenomClient" required />
+		</div>
+		
+		<div>
+			<label for="adresseClient">Commune : </label>
+			<select name="adresse" id="adresseClient">
+				<option value="">-- Choississez la commune --</option>
+			<% if (JSON.stringify(result)!=JSON.stringify([])) { %>
+				<% result.forEach(element => { %>
+				<option value="<%= element.nom %>"><%= element.nom %></option>
+				<% }) %>
+			<% } %>
+			</select>
+		</div>        
+		<div>
+			<label for="idadminClient">ID administrateur : </label>
+			<select name="idadmin" id="idadminClient">
+				<option value="">-- Choississez l'administrateur --</option>
+			<% if (JSON.stringify(result2)!=JSON.stringify([])) { %>
+				<% result2.forEach(element => { %>
+				<option value="<%= element.idadm %>"><%= element.idadm %> - <%= element.prenom %> <%= element.nom %></option>    
+				<% }) %>
+			<% } %>
+			</select>
+		</div>
 		<br><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Envoyer">
     </form>
-
     <% console.log("\nFélicitations, vous êtes connecté à la page AjoutClient !\n") %> 
 </body>

@@ -5,6 +5,7 @@ const server = http.createServer(app)
 const mysql = require('mysql') // Module mysql permettant la connexion de notre webapp au serveur de la base de données
 const ejs = require('ejs') // Module permettant le rendu HTML généré de manière dynamique (Embedded JavaScript)
 const bodyParser = require('body-parser') // Module permettant la gestion des paramètres de formulaire
+const session = require('express-session')
 var urlecodedParser = bodyParser.urlencoded({extended:false})
 
 const PORT = process.env.PORT || 8080 // Définition du port sur lequel le serveur sera écouté
@@ -14,9 +15,15 @@ var result = [] // Contient les résultats de la requête SQL demandé
 var result2 = [] // Contient les résultats de la requête SQL demandé
 var idvalue = [] // Contient les résultats de la requête SQL demandé
 
-
-
 app.use('/',express.static(__dirname + '/assets')) // Permet l'utilisation des fichiers présents de le dossier /assets
+
+app.use(session({
+  secret: "s3Cur3",
+  cookie:{
+    httpOnly:true,
+    secure:true
+  }
+}))
 
 app.get('/',function(req,res){
   res.status(200).render(__dirname + '/assets/index.ejs',{result:result}) // Fait le rendu de l'index.ejs lors d'une requête GET /
@@ -48,10 +55,12 @@ app.get('/ajoutclient',function(req,res){
 	valueidmax=Object.values(idmaxobj[0])[0]
 	if (!valueidmax){
 		idvalue=1
-		console.log('1')}
+    console.log('1')
+  }
 	else{
-	idvalue=valueidmax+1
-	console.log('2')};
+	  idvalue=valueidmax+1
+    console.log('2')
+  };
 		
   });
 
@@ -153,11 +162,52 @@ app.get('/ajoutvoiture',function(req,res){
   });
  
 
-
-
-
-app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
+app.post('/mysql/insert/client',urlecodedParser,function(req,res){
   res.status(200)
+  console.log(req.body)
+  connection.query("INSERT INTO projet.client VALUES (?,?,?,?,?)",[req.body.idclient,req.body.nom,req.body.prenom,req.body.adresse,req.body.idadmin],function(err,data){
+    if (err) throw err;
+    console.log("Insertion du nouveau client")
+  })
+
+  var nbClients = 9
+  connection.query("SELECT nb_clients FROM projet.commune WHERE nom=? ",[req.body.adresse],function(err,data){
+    if (err) throw err;
+    console.log("Selection de nb_clients dans projet.commune")
+    console.log(data)
+    dataObject = JSON.parse(JSON.stringify(data))
+    console.log(dataObject)
+    nbClients = dataObject[0].nb_clients + 1
+    console.log("Dans connection.query : " + nbClients)
+    connection.query("UPDATE projet.commune SET nb_clients=? WHERE nom=?",[nbClients,req.body.adresse],function(err,data){
+      if(err) throw err;
+      console.log("Mise à jour de nb_clients dans projet.commune")
+    })
+  })
+
+  
+
+  res.redirect("/affich")
+})
+
+app.post('/mysql/insert/commune',urlecodedParser,function(req,res){
+  res.status(200)
+  console.log(req.body)
+  SQLRequest = "INSERT INTO projet.commune VALUES (?,0)"
+  SQLvalues = [req.body.nom]
+  console.log(SQLRequest)
+  console.log(SQLvalues)
+  connection.query(SQLRequest,SQLvalues,function(err,data){
+    if (err) throw err;
+    console.log("Ajout de commune fait")
+  })
+  res.redirect("/affich")
+})
+
+
+app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST effectuée à la suite du formulaire de la page affich.ejs. Cette requête a pour de récupérer les données de la table à afficher
+  res.status(200)
+  console.log(req.body)
   switch (req.body.table){
     case "adm":
       nom = "Administrateur"
