@@ -16,7 +16,7 @@
     <h1>Affichage de la base de données</h1>
     <p>Vous êtes connectés en tant 
         <% if (user=="techni") { %> <%# On fait un test pour savoir qui est connecté à la base de données %> 
-            que technicien.
+            que technicien, vous n'avez donc pas le droit d'ajouter de nouveaux techniciens ou administrateurs.
         <% } else { %>
             qu'administrateur.
         <% } %>
@@ -35,7 +35,8 @@
             <option value="voi">Voiture</option>
 		</select>
 		<br><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Afficher">
+		<input type="submit" formaction="/choixajout/" value="Ajouter une entrée à la table">
     </form>
     <% console.log("\nFélicitations, vous êtes connecté à la page Affich !\n") %> 
     <% if (nomTable!="") { %>
@@ -59,5 +60,11 @@
             </tbody>
         </table>
     <% } %>
+	<br><br>
+	<form action="/quit" method="GET">
+        <label for="submitSQLRequest">Se déconnecter de la base de données :</label>
+        <input type="submit" value="Déconnexion">
+    </form>
+
 
 </body>

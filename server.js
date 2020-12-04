@@ -216,6 +216,45 @@ app.post('/mysql/select/',urlecodedParser,function(req,res){ // Requête POST du
   res.redirect('/affich') // Fait une redirection à l'adresse test
 }) 
 
+app.post('/choixajout/',urlecodedParser,function(req,res){ // Requête POST du formulaire /mysql
+  res.status(200)
+  switch (req.body.table){
+    case "adm":
+	  if (connection.config.user=="techni") {
+		res.redirect('/affich')
+	  } else {
+		res.redirect('/ajoutadministrateur')}
+      break
+    case "arr":
+      res.redirect('/ajoutarrivee')
+      break
+    case "cli":
+      res.redirect('/ajoutclient')
+      break
+    case "com":
+      res.redirect('/ajoutcommune')
+      break
+    case "int":
+      res.redirect('/ajoutintervention')
+      break
+    case "techn":
+	  if (connection.config.user=="techni") {
+		res.redirect('/affich')
+	  } else {
+        res.redirect('/ajouttechnicien')}
+      break
+    case "voi":
+      res.redirect('/ajoutvoiture')
+      break
+    case "":
+	  res.redirect('/affich')
+      break
+  }
+}) 
+
+
+
+
 app.get('/conn/:user',function(req,res){
   res.status(200)
   switch (req.params.user){
@@ -252,5 +291,6 @@ app.get('/quit',function(req,res){
       return console.log('error:'+err.message)
     }
     console.log('Close the database connection.')
+	res.redirect('/')
   })
 })
